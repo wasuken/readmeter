@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "ci": "tsc --noEmit && vitest run && eslint"
   },
   "dependencies": {
     "next": "16.1.6",
