@@ -32,6 +32,27 @@
 
 ## Part6以降（未確定）
 
+### 書籍検索機能（NDLサーチ連携）
+
+- [ ] `GET /api/books/search?title=キーワード` - Route Handler（プロキシ）
+  - NDLサーチ OpenSearch API を叩いてXMLをパースしてJSONで返す
+  - エンドポイント: `https://ndlsearch.ndl.go.jp/api/opensearch?title=...&cnt=10&mediatype=1`
+  - レスポンス: `[{ title, author, isbn, publisher }]`
+  - ISBNがない書誌はフィルタして除外する
+  - 参考: https://ndlsearch.ndl.go.jp/help/api/specifications
+- [ ] `src/app/page.tsx` に検索UIを追加
+  - タイトル入力フォーム → 候補一覧表示 → 選択で追加フォームに自動補完
+  - 既存の手動フォームと共存させる（ISBNがある場合はそのまま使えるよう残す）
+
+### 設計上の注意点
+
+- NDLサーチAPIのレスポンスはXML（RSS 2.0）なので、ブラウザから直接叩かない
+  - CORSの問題を避けるためNext.jsのRoute Handler経由でプロキシする
+  - XMLのパースは `fast-xml-parser` 等を使うか、正規表現で最小限に処理する
+- NDLサーチはISBNなしの書誌も返すのでフィルタ必須
+- 利用条件: 非営利目的は申請不要
+  - 参考: https://ndlsearch.ndl.go.jp/help/api
+
 ### DB拡張
 
 - [ ] `User` テーブルをスキーマに追加
