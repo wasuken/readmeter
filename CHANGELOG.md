@@ -5,6 +5,56 @@
 
 ---
 
+## [Part4] - 2026-03-05
+
+### Added
+
+- `src/errors/AppError.ts` - カスタム例外クラス
+  - `NotFoundError extends Error` - リソース未発見（404）
+  - `DomainError extends Error` - ビジネスルール違反（422）用に定義（現時点では未使用）
+- `src/lib/handleError.ts` - Route Handler共通エラーハンドラ
+  - `instanceof` チェックで例外クラスをHTTPステータスにマッピング
+  - 優先順位: `NotFoundError(404)` → `DomainError(422)` → `Error(400)` → その他(500)
+- `src/app/api/books/[id]/start/route.ts` - `PATCH /api/books/:id/start`
+  - 積読 → 読中のステータス変更
+- `src/app/api/books/[id]/complete/route.ts` - `PATCH /api/books/:id/complete`
+  - 読中 → 読了のステータス変更
+  - body: `{ "rating": number }` (optional)
+  - 空ボディ対応: `req.json().catch(() => ({}))`
+- `src/app/api/books/[id]/route.ts` - `DELETE /api/books/:id`
+  - 削除成功時は `204 No Content`（`new NextResponse(null, { status: 204 })`）
+
+### Changed
+
+- `src/service/BookShelfService.ts`
+  - `throw new Error(...)` を `throw new NotFoundError(...)` に置き換え
+  - 既存テストはそのまま通る（メッセージ文字列は変更なし）
+- `src/service/BookShelfService.test.ts`
+  - `toBeInstanceOf(NotFoundError)` の検証テストを2件追加（計15件）
+
+### Design Decisions
+
+- **`DomainError` は現時点で未使用のまま定義だけ置く**
+  - 将来「積読→読了の遷移エラーを422にしたい」要件が出た時点で `Book.changeStatus` が投げるように変える
+  - 今は必要ないのでYAGNIの原則に従い実装しない
+- **状態遷移違反（`Book.changeStatus` が投げる `Error`）は400として扱う**
+  - リクエスト起因のエラーとして統一
+  - `DomainError(422)` に変えたい場合は `Book.changeStatus` を修正するだけでよい構造
+- **`handleError` を共通ヘルパーに切り出した理由**
+  - Route Handlerが3本に増え、エラー処理の重複を避けるため
+  - Route HandlerはDIの組み立てとHTTP変換のみに集中させる方針を維持
+
+### Notes
+
+- **Next.js 15以降、Dynamic Route の `params` は `Promise`**
+  - `const { id } = await params;` が必要
+  - 参考: https://nextjs.org/docs/app/api-reference/file-conventions/route
+- **RFC 9110 に基づく422の使いどころ**
+  - リクエスト形式は正しいが業務上処理できない場合に使う
+  - 参考: https://www.rfc-editor.org/rfc/rfc9110#section-15.5.21
+
+---
+
 ## [Part3] - 2026-01-10
 
 ### Added

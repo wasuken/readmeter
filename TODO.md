@@ -8,31 +8,25 @@
 
 ### エンドポイント
 
-- [ ] `PATCH /api/books/:id/start` - 積読 → 読中
+- [x] `PATCH /api/books/:id/start` - 積読 → 読中
   - `src/app/api/books/[id]/start/route.ts`
-- [ ] `PATCH /api/books/:id/complete` - 読中 → 読了
+- [x] `PATCH /api/books/:id/complete` - 読中 → 読了
   - `src/app/api/books/[id]/complete/route.ts`
   - body: `{ "rating": number }` (optional)
-- [ ] `DELETE /api/books/:id` - 本を削除
+- [x] `DELETE /api/books/:id` - 本を削除
   - `src/app/api/books/[id]/route.ts`
 
 ### エラーハンドリング
 
-- [ ] エラー種別ごとにHTTPステータスを整理
+- [x] エラー種別ごとにHTTPステータスを整理
   - 400: バリデーションエラー（ISBNが不正など）
   - 404: リソースが存在しない（Book not found）
-  - 409 or 422: 状態遷移違反（積読→読了など）
+  - 422: 状態遷移違反（積読→読了など）
   - 500: その他
-- [ ] カスタム例外クラスの導入検討
+- [x] カスタム例外クラスの導入
   - `NotFoundError extends Error`
   - `DomainError extends Error`
   - Route Handlerでinstanceofチェックしてステータスを振り分ける
-
-### 注意点（実装前に必読）
-
-- Next.js 15以降、Dynamic Route の `params` は `Promise`
-  - `const { id } = await params;` が必要
-  - 参考: https://nextjs.org/docs/app/api-reference/file-conventions/route#context-optional
 
 ---
 
@@ -107,3 +101,13 @@
 - [x] `PrismaBookRepository` 実装
 - [x] `GET /api/books` Route Handler
 - [x] `POST /api/books` Route Handler
+
+### Part4 ✅
+
+- [x] `src/errors/AppError.ts` - カスタム例外クラス（`NotFoundError` / `DomainError`）
+- [x] `src/lib/handleError.ts` - Route Handler共通エラーハンドラ
+- [x] `PATCH /api/books/:id/start` Route Handler
+- [x] `PATCH /api/books/:id/complete` Route Handler
+- [x] `DELETE /api/books/:id` Route Handler
+- [x] `BookShelfService` の `throw new Error` を `NotFoundError` に置き換え
+- [x] テスト追加（13 → 15件、全パス）
