@@ -3,6 +3,7 @@ import { ISBN } from "../domain/valueobject/ISBN";
 import { Rating } from "../domain/valueobject/Rating";
 import { ReadingStatus } from "../domain/valueobject/ReadingStatus";
 import { BookRepository } from "../repository/BookRepository";
+import { NotFoundError } from "../errors/AppError";
 
 export class BookShelfService {
   constructor(private readonly repo: BookRepository) {}
@@ -16,7 +17,7 @@ export class BookShelfService {
 
   async startReading(id: string): Promise<Book> {
     const book = await this.repo.findById(id);
-    if (!book) throw new Error(`Book not found: ${id}`);
+    if (!book) throw new NotFoundError(`Book not found: ${id}`);
     book.changeStatus(ReadingStatus.Reading);
     await this.repo.save(book);
     return book;
@@ -24,7 +25,7 @@ export class BookShelfService {
 
   async completeReading(id: string, ratingValue?: number): Promise<Book> {
     const book = await this.repo.findById(id);
-    if (!book) throw new Error(`Book not found: ${id}`);
+    if (!book) throw new NotFoundError(`Book not found: ${id}`);
     book.changeStatus(ReadingStatus.Completed);
     if (ratingValue !== undefined) {
       book.addRating(new Rating(ratingValue));
@@ -39,7 +40,7 @@ export class BookShelfService {
 
   async removeBook(id: string): Promise<void> {
     const book = await this.repo.findById(id);
-    if (!book) throw new Error(`Book not found: ${id}`);
+    if (!book) throw new NotFoundError(`Book not found: ${id}`);
     await this.repo.delete(id);
   }
 }
