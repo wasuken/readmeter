@@ -1,9 +1,9 @@
-import { PrismaClient, Book as PrismaBook } from "@prisma/client";
+import { PrismaClient, Book as PrismaBook } from "@/generated/prisma/client";
 import { BookRepository } from "./BookRepository";
-import { Book } from "../domain/entity/Book";
-import { ISBN } from "../domain/valueobject/ISBN";
-import { Rating } from "../domain/valueobject/Rating";
-import { ReadingStatus } from "../domain/valueobject/ReadingStatus";
+import { Book } from "@/domain/entity/Book";
+import { ISBN } from "@/domain/valueobject/ISBN";
+import { Rating } from "@/domain/valueobject/Rating";
+import { ReadingStatus } from "@/domain/valueobject/ReadingStatus";
 
 export class PrismaBookRepository implements BookRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -24,7 +24,7 @@ export class PrismaBookRepository implements BookRepository {
 
   async findAll(): Promise<Book[]> {
     const records = await this.prisma.book.findMany();
-    return records.map((r) => this.toDomain(r));
+    return records.map((r: PrismaBook) => this.toDomain(r));
   }
 
   async delete(id: string): Promise<void> {
