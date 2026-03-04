@@ -1,7 +1,7 @@
 import { Book } from "./Book";
 import { ReadingStatus } from "../valueobject/ReadingStatus";
 import { Rating } from "../valueobject/Rating";
-import { ISBN } from '../valueobject/ISBN';
+import { ISBN } from "../valueobject/ISBN";
 
 test("Book", () => {
   const book = new Book(
