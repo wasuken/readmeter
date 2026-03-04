@@ -5,6 +5,39 @@
 
 ---
 
+## [Part5] - 2026-03-05
+
+### Added
+
+- `src/app/page.tsx` - 簡易UI（Client Component）
+  - 本の追加フォーム（id / title / isbn）
+  - 本棚をUnread / Reading / Completedでグループ表示
+  - Unread: 「読み始める」ボタン → `PATCH /api/books/:id/start`
+  - Reading: 評価入力（1〜5、省略可）＋「読了にする」ボタン → `PATCH /api/books/:id/complete`
+  - 全ステータス: 削除ボタン → `DELETE /api/books/:id`
+  - APIエラー時はフォーム下にエラーメッセージを表示
+
+### Design Decisions
+
+- **Client Componentを選んだ理由**
+  - ボタン操作ごとにstateを更新して再描画する必要があるため
+  - Server Component + Server Actionの構成は今回の学習目的（テスト設計）と外れるため避けた
+- **fetchBooks() で毎回再取得する方針**
+  - 楽観的更新（Optimistic Update）はしない
+  - サーバーの状態を正として再取得するシンプルな方針
+- **ratingInputs を `Record<string, string>` で管理**
+  - 複数の本が同時にReadingでも入力値が干渉しないようにbookIdをkeyにする
+- **フロントエンドにビジネスロジックを持たせない**
+  - ボタンの出し分けはUX上の都合（Unreadに「読了にする」ボタンを出さない等）
+  - バリデーションはすべてAPIに委ねる。curlで直接叩いても同じルールが適用される
+
+### Notes
+
+- テストは変更なし（15件、全パス）
+- フロントエンド層のテストはE2E（Playwright等）で担保する方針を維持
+
+---
+
 ## [Part4] - 2026-03-05
 
 ### Added

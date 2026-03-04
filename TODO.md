@@ -30,15 +30,7 @@
 
 ---
 
-## Part5以降（未確定）
-
-### フロントエンド
-
-- [ ] `src/app/page.tsx` に簡易UI実装
-  - 本の一覧表示
-  - 本の追加フォーム（id / title / isbn 入力）
-  - ステータス変更ボタン（読中にする / 読了にする）
-  - 削除ボタン
+## Part6以降（未確定）
 
 ### DB拡張
 
@@ -101,6 +93,15 @@
 - [x] `PrismaBookRepository` 実装
 - [x] `GET /api/books` Route Handler
 - [x] `POST /api/books` Route Handler
+
+### Part5 ✅
+
+- [x] `src/app/page.tsx` - Client Componentとして実装
+  - 本の追加フォーム（id / title / isbn）
+  - 本棚（Unread / Reading / Completed グループ表示）
+  - ステータス変更ボタン（読み始める / 読了にする）
+  - 読了時のrating入力（1〜5、各本ごとに独立したstate）
+  - 削除ボタン
 
 ### Part4 ✅
 
