@@ -1,7 +1,6 @@
 import { BookShelfService } from "./BookShelfService";
 import { BookRepository } from "../repository/BookRepository";
 import { Book } from "../domain/entity/Book";
-import { ISBN } from "../domain/valueobject/ISBN";
 import { ReadingStatus } from "../domain/valueobject/ReadingStatus";
 
 // インメモリのMock実装
