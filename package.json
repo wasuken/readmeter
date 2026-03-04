@@ -13,6 +13,7 @@
     "ci": "tsc --noEmit && vitest run && eslint"
   },
   "dependencies": {
+    "@prisma/client": "^7.4.2",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -29,6 +30,7 @@
     "eslint-config-next": "16.1.6",
     "jsdom": "^28.1.0",
     "prettier": "^3.8.1",
+    "prisma": "^7.4.2",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.1.1",
